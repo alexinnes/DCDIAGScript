@@ -2,7 +2,7 @@ function get-dcdiagresults {
     [cmdletbinding()]
     param(
         # Parameter help description
-        [Parameter(AttributeValues)]
+        [Parameter()]
         $server = "LocalHost"
 
     )
@@ -42,7 +42,7 @@ function get-readminresults  {
     [cmdletbinding()]
     param(
 
-        [Parameter(AttributeValues)]
+        [Parameter()]
         $Server = "localhost"
     )
     $repadmin = @()
