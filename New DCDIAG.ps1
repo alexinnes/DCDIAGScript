@@ -1,4 +1,11 @@
-function get-dcdiagresults ($server){
+function get-dcdiagresults {
+    [cmdletbinding()]
+    param(
+        # Parameter help description
+        [Parameter(AttributeValues)]
+        $server = "LocalHost"
+
+    )
 
     $dcdiag = (Dcdiag.exe /s:$Server) -split ('[\r\n]')
 
@@ -10,7 +17,8 @@ function get-dcdiagresults ($server){
         {
             "Starting" {
                 $testName = ($test -Replace ".*Starting test: ").Trim()
-                }
+            }
+
             "passed test|failed test" {
                 If ($test -Match "passed test"){
                     $TestStatus = "Passed"
@@ -30,28 +38,34 @@ function get-dcdiagresults ($server){
     $AllDCDiags
 }
 
-        function get-readminresults ($server) {
-            $repadmin = @()
-            $rep = (Invoke-Command $Server -ScriptBlock{repadmin /showrepl /repsto /csv | ConvertFrom-Csv})
+function get-readminresults  {
+    [cmdletbinding()]
+    param(
 
-         ForEach($r in $rep) {
-            # Adding properties to object
-            $REPObject = New-Object PSCustomObject -Property @{
-                Destination_DCA = $r."destination dsa"
-                Source_DSA = $r."source dsa"
-                Source_DSA_Site = $r."Source DSA Site"
-                Last_Success_Time = $r."last success time"
-                Last_Failure_Status = $r."Last Failure Status"
-                Last_Failure_Time = $r."last failure time"
-                Number_of_failures = $r."number of failures"
+        [Parameter(AttributeValues)]
+        $Server = "localhost"
+    )
+    $repadmin = @()
+    $rep = (Invoke-Command $Server -ScriptBlock{repadmin /showrepl /repsto /csv | ConvertFrom-Csv})
 
-            }
+    ForEach($r in $rep) {
+    # Adding properties to object
+    $REPObject = New-Object PSCustomObject -Property @{
+        Destination_DCA = $r."destination dsa"
+        Source_DSA = $r."source dsa"
+        Source_DSA_Site = $r."Source DSA Site"
+        Last_Success_Time = $r."last success time"
+        Last_Failure_Status = $r."Last Failure Status"
+        Last_Failure_Time = $r."last failure time"
+        Number_of_failures = $r."number of failures"
 
-            # Adding object to array
-            $repadmin += $REPObject
+    }
 
-            }
-            $repadmin
-        }
+    # Adding object to array
+    $repadmin += $REPObject
+
+    }
+    $repadmin
+}
 
 
