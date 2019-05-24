@@ -1,4 +1,4 @@
-function get-dcdiagresults {
+function get-DCDiagResults {
     [cmdletbinding()]
     param(
         # Parameter help description
@@ -38,7 +38,7 @@ function get-dcdiagresults {
     $AllDCDiags
 }
 
-function get-readminresults  {
+function get-RepAdminResults  {
     [cmdletbinding()]
     param(
 
