@@ -47,24 +47,46 @@ function get-RepAdminResults  {
     )
     $repadmin = @()
     $rep = (Invoke-Command $Server -ScriptBlock{repadmin /showrepl /repsto /csv | ConvertFrom-Csv})
+    
+    If((Get-WmiObject win32_operatingsystem).caption -like "*Server 2012*"){
 
-    ForEach($r in $rep) {
-    # Adding properties to object
-    $REPObject = New-Object PSCustomObject -Property @{
-        Destination_DC = $r."destination dc"
-        Source_DC = $r."source dc"
-        Source_DC_Site = $r."Source DC Site"
-        Last_Success_Time = $r."last success time"
-        Last_Failure_Status = $r."Last Failure Status"
-        Last_Failure_Time = $r."last failure time"
-        Number_of_failures = $r."number of failures"
+        ForEach($r in $rep) {
+        # Adding properties to object
+        $REPObject = New-Object PSCustomObject -Property @{
+            Destination_DC = $r."destination dc"
+            Source_DC = $r."source dc"
+            Source_DC_Site = $r."Source DC Site"
+            Last_Success_Time = $r."last success time"
+            Last_Failure_Status = $r."Last Failure Status"
+            Last_Failure_Time = $r."last failure time"
+            Number_of_failures = $r."number of failures"
 
+        }
+
+        # Adding object to array
+        $repadmin += $REPObject
+
+        }
+    }else{
+        ForEach($r in $rep) {
+            # Adding properties to object
+            $REPObject = New-Object PSCustomObject -Property @{
+                Destination_DC = $r."destination dsa"
+                Source_DC = $r."source dsa"
+                Source_DC_Site = $r."Source Dsa Site"
+                Last_Success_Time = $r."last success time"
+                Last_Failure_Status = $r."Last Failure Status"
+                Last_Failure_Time = $r."last failure time"
+                Number_of_failures = $r."number of failures"
+
+            }
+
+            # Adding object to array
+            $repadmin += $REPObject
+
+            }
     }
 
-    # Adding object to array
-    $repadmin += $REPObject
-
-    }
     $repadmin
 }
 
