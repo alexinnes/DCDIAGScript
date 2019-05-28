@@ -51,9 +51,9 @@ function get-RepAdminResults  {
     ForEach($r in $rep) {
     # Adding properties to object
     $REPObject = New-Object PSCustomObject -Property @{
-        Destination_DCA = $r."destination dsa"
-        Source_DSA = $r."source dsa"
-        Source_DSA_Site = $r."Source DSA Site"
+        Destination_DC = $r."destination dc"
+        Source_DC = $r."source dc"
+        Source_DC_Site = $r."Source DC Site"
         Last_Success_Time = $r."last success time"
         Last_Failure_Status = $r."Last Failure Status"
         Last_Failure_Time = $r."last failure time"
