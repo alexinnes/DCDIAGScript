@@ -96,7 +96,7 @@ function Get-RepAdminResults  {
 .EXAMPLE
     Another example of how to use this cmdlet
 #>
-function Check-ReplicationMethod {
+function Get-ReplicationMethod {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory=$false)]
