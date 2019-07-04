@@ -132,11 +132,17 @@ function Get-DomainAlert {
             Mandatory=$true,
             ValueFromPipelineByPropertyName = $true
         )]
-        [validateset("ntfrs", "dfs")]
-        $replicationMethod
+        [validateset("ntfrs", "dfsr")]
+        $replicationMethod,
+
+        # Parameter help description
+        [Parameter(
+            Mandatory=$false
+        )]
+        $computerName = $env:COMPUTERNAME
     )
 
-    $Yesterday = (Get-Date) - (New-TimeSpan -Day 1)
+    $Yesterday = (Get-Date).AddDays(-1)
 
     If($replicationMethod -eq "ntfrs"){
         $logName = "File Replication Service"
@@ -149,7 +155,7 @@ function Get-DomainAlert {
 
     }
     #search on hash table
-    $events = Get-WinEvent -LogName $logName -ComputerName $computerName -FilterHashtable $eventHash
+    $events = Get-WinEvent -ComputerName $computerName -FilterHashtable $eventHash
     $events
 
 }
